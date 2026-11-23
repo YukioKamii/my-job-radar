@@ -1,255 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#1A33FF" />
-  <meta name="description" content="My Job Radar — search open roles across company career sites, all in one place." />
-  <title>My Job Radar — Find roles before everyone else.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;650;700;750;800;900&display=swap" rel="stylesheet" />
-  <style>
-    :root{--blue:#1A33FF;--ink:#101426;--muted:#72798b;--line:#e5e8f0;--soft:#f7f8fc;--pale:#eef0ff;--white:#fff;--radius:18px;--shadow:0 16px 55px rgba(25,35,90,.055)}
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;font-family:Montserrat,Arial,sans-serif;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased}
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-    button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #9aa8ff;outline-offset:3px}
-    .shell{max-width:1130px;margin:0 auto;padding:0 30px}
-    header{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f1f5}
-    .logo{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:850;letter-spacing:-.8px;white-space:nowrap}
-    .brand-icon{width:38px;height:38px;background:var(--blue);border-radius:12px;display:grid;place-items:center;color:white;box-shadow:0 5px 15px rgba(26,51,255,.2)}
-    .brand-icon svg{width:23px;height:23px}
-    .top-right{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em}
-    .top-right .dot{width:8px;height:8px;border-radius:100%;background:#31c885;box-shadow:0 0 0 4px #e8fbf2}
-    .hero{text-align:center;padding:70px 0 45px}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--blue);background:#eef0ff;border:1px solid #e3e7ff;padding:9px 13px;border-radius:30px;font-size:10px;letter-spacing:.11em;font-weight:850;text-transform:uppercase}
-    .eyebrow svg{height:13px;width:13px}
-    h1{font-size:clamp(38px,5.4vw,67px);line-height:1.12;font-weight:850;letter-spacing:-.065em;margin:22px 0 17px}
-    h1 span{color:var(--blue)}
-    .hero p{font-size:14px;line-height:1.9;color:var(--muted);font-weight:500;margin:0 auto;max-width:520px}
-    .workspace{display:grid;grid-template-columns:minmax(0,1.34fr) minmax(320px,.92fr);gap:20px;align-items:start;margin-bottom:60px}
-    .panel{border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);overflow:hidden}
-    .panel-header{padding:23px 27px 21px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .panel-title{margin:0;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:850;letter-spacing:-.03em}
-    .panel-title svg{color:var(--blue);width:18px;height:18px}
-    .step{font-size:10px;color:#a0a6b4;font-weight:800;letter-spacing:.08em}
-    .panel-body{padding:26px 27px 28px}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 15px}
-    .field{display:flex;flex-direction:column;gap:9px;min-width:0}
-    .field.full{grid-column:1/-1}
-    .field label,.section-label{font-weight:800;font-size:11px;letter-spacing:-.01em}
-    .optional{font-size:10px;color:#a2a8b4;font-weight:600;margin-left:4px}
-    .field input,.field select{height:47px;width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 13px;outline:none;font-size:12px;font-weight:550;color:var(--ink);transition:border-color .2s,box-shadow .2s}
-    .field input:focus,.field select:focus{border-color:#8694ff;box-shadow:0 0 0 3px #eef0ff}
-    .field input::placeholder{color:#a6adbb;font-weight:500}
-    .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23747b8d' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:35px}
-    .hint{font-size:10px;line-height:1.6;color:#969eac;margin-top:-3px;font-weight:500}
-    .rule{height:1px;background:var(--line);margin:27px 0 23px}
-    .section-heading{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:15px}
-    .counter{font-size:10px;font-weight:700;color:var(--blue);background:var(--pale);border-radius:20px;padding:6px 9px}
-    .site-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-    .site-option{position:relative;display:flex;align-items:center;gap:10px;min-height:47px;padding:0 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;user-select:none;transition:background .15s,border-color .15s}
-    .site-option:has(input:checked){background:#f7f8ff;border-color:#bfc7ff}
-    .site-option input{position:absolute;opacity:0;width:1px;height:1px}
-    .site-option:has(input:focus-visible){outline:3px solid #9aa8ff;outline-offset:2px}
-    .custom-check{width:16px;height:16px;border:1.5px solid #cbd0db;border-radius:5px;flex:none;display:grid;place-items:center;background:#fff;transition:all .15s}
-    .site-option input:checked+.custom-check{background:var(--blue);border-color:var(--blue)}
-    .custom-check svg{height:12px;width:12px;color:white;opacity:0}
-    .site-option input:checked+.custom-check svg{opacity:1}
-    .site-name{font-size:11px;font-weight:750;letter-spacing:-.025em}
-    .site-options-actions{display:flex;gap:15px;margin-top:12px}
-    .text-button{border:0;padding:3px 0;background:transparent;color:var(--blue);font-size:10px;font-weight:800}
-    .text-button:hover{text-decoration:underline}
-    .right-column{display:flex;flex-direction:column;gap:18px}
-    .query-box{background:var(--soft);border:1px solid #edf0f6;border-radius:12px;padding:16px 16px 14px;min-height:143px;word-break:break-word;overflow-wrap:anywhere;color:#3f4866;font-size:11px;line-height:1.9;font-weight:600}
-    .query-box .operator{color:var(--blue);font-weight:850}
-    .query-box .exclusion{color:#db4c6a}
-    .query-box .placeholder{color:#a0a6b4;font-weight:500}
-    .preview-note{font-size:10px;color:#969dab;font-weight:500;line-height:1.65;margin-top:10px}
-    .preview-actions{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:14px}
-    .preview-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#687187;font-weight:750}
-    .preview-badge i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#35c78c}
-    .copy-button{border:1px solid var(--line);background:white;padding:9px 11px;border-radius:8px;font-size:10px;font-weight:800;color:#515b74;display:flex;gap:7px;align-items:center}
-    .copy-button svg{height:13px;width:13px}
-    .copy-button:hover{border-color:#bfc7ff;color:var(--blue)}
-    .action-card{background:var(--blue);border:1px solid var(--blue);border-radius:var(--radius);padding:25px;box-shadow:0 12px 30px rgba(26,51,255,.15);color:#fff}
-    .action-card h3{font-size:17px;font-weight:850;letter-spacing:-.04em;margin:0 0 8px}
-    .action-card p{font-size:11px;line-height:1.8;color:#dce1ff;font-weight:550;margin:0 0 23px}
-    .primary-button,.secondary-button{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:49px;border-radius:10px;font-size:12px;font-weight:850;transition:transform .16s,box-shadow .16s}
-    .primary-button{background:#fff;border:1px solid white;color:var(--blue)}
-    .secondary-button{margin-top:10px;background:transparent;border:1px solid #8794ff;color:#fff}
-    .primary-button svg,.secondary-button svg{height:16px;width:16px}
-    .primary-button:hover,.secondary-button:hover{transform:translateY(-2px)}
-    .primary-button:disabled,.secondary-button:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    .action-foot{display:flex;align-items:center;justify-content:center;gap:7px;font-size:9px;color:#cbd2ff;font-weight:600;margin-top:17px;line-height:1.5;text-align:center}
-    .tip-card{display:flex;gap:12px;border:1px solid #e9ecf4;border-radius:14px;background:#fafbff;padding:17px 18px;align-items:flex-start}
-    .tip-icon{border:1px solid #e2e7ff;background:#eef0ff;color:var(--blue);width:30px;height:30px;display:grid;place-items:center;border-radius:9px;flex:none}
-    .tip-icon svg{height:17px;width:17px}
-    .tip-card strong{font-size:11px;font-weight:800}
-    .tip-card p{margin:6px 0 0;color:#8991a2;font-size:10px;line-height:1.8;font-weight:550}
-    footer{border-top:1px solid #eff0f5;padding:24px 0 32px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:10px;color:#9ba2b0;font-weight:600}
-    footer strong{color:#4e566c;font-weight:850}
-    .error-message{color:#f9d5dd;font-size:10px;margin-top:11px;line-height:1.5;font-weight:650;display:none}
-    .error-message.visible{display:block}
-    @media(max-width:800px){.shell{padding:0 20px}.workspace{grid-template-columns:1fr;gap:16px}.hero{padding:54px 0 36px}.right-column{display:grid;grid-template-columns:1fr 1fr;gap:15px}.right-column .panel{grid-column:1/-1}.action-card,.tip-card{grid-column:1/-1}}
-    @media(max-width:520px){.shell{padding:0 16px}header{height:72px}.top-right{font-size:9px}.brand-icon{height:34px;width:34px}.logo{font-size:15px;gap:9px}.hero{padding:45px 0 32px}h1{font-size:39px;letter-spacing:-.06em;margin:19px 0 15px}.hero p{font-size:12px}.panel-header{padding:20px}.panel-body{padding:21px 19px}.form-grid{grid-template-columns:1fr;gap:18px}.field.full{grid-column:1}.site-grid{gap:8px}.site-option{padding:0 9px;gap:7px}.site-name{font-size:10px}.action-card{padding:22px 20px}footer{flex-direction:column;align-items:flex-start;gap:7px}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1A33FF">
+<meta name="description" content="My Job Radar — Your personalized search for jobs and the people hiring.">
+<title>My Job Radar — Make your next move.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1a33ff;--ink:#111532;--muted:#737b93;--line:#e8ebf3;--bg:#f8f9fd;--white:#fff;--soft:#eef0ff;--shadow:0 14px 40px rgba(24,36,99,.055)}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:500 14px/1.55 Montserrat,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a7b1ff;outline-offset:2px}a{color:inherit;text-decoration:none}.shell{max-width:1250px;margin:0 auto;padding:0 32px}.top{border-bottom:1px solid var(--line);background:#fff}.top-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:900;letter-spacing:-.8px}.logo{width:37px;height:37px;display:grid;place-items:center;border-radius:12px;background:var(--blue);color:white;box-shadow:0 7px 18px #1a33ff30}.logo svg{width:24px;height:24px}.top-right{display:flex;align-items:center;gap:10px}.lang{display:flex;padding:4px;border:1px solid var(--line);border-radius:11px}.lang button{border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:800;padding:7px 9px;border-radius:7px}.lang button.active{background:var(--ink);color:white}.top-label{font-size:11px;font-weight:700;color:var(--muted)}.avatar{width:35px;height:35px;border:1px solid #dfe3ff;border-radius:50%;background:var(--soft);color:var(--blue);font-weight:900}.hero{padding:62px 0 43px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{color:var(--blue);font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}.hero h1{font-weight:900;letter-spacing:-2.6px;line-height:1.13;font-size:clamp(34px,5vw,58px);margin:14px 0}.hero h1 span{color:var(--blue)}.hero p{margin:0;color:var(--muted);max-width:570px;font-size:14px}.hero-chip{white-space:nowrap;display:flex;align-items:center;gap:9px;background:#f4f6ff;border:1px solid #e6e9ff;border-radius:999px;padding:10px 15px;font-weight:800;font-size:11px;color:var(--blue)}.pulse{width:8px;height:8px;background:#4ccd8a;display:inline-block;border-radius:50%;box-shadow:0 0 0 4px #d9f8e7}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(285px,.85fr);gap:22px;padding-bottom:50px}.panel{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:var(--shadow);padding:27px}.panel+.panel{margin-top:20px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 23px}.section-title h2{font-weight:900;letter-spacing:-.7px;font-size:18px;margin:0}.section-sub{font-size:11px;color:var(--muted);font-weight:600}.num{display:inline-grid;place-items:center;margin-right:8px;width:25px;height:25px;border-radius:8px;color:var(--blue);background:var(--soft);font-size:11px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:19px}.field.full{grid-column:1/-1}label.fieldlabel{display:block;font-size:11px;font-weight:800;margin-bottom:8px}.hint{font-size:10px;color:var(--muted);font-weight:500;margin-top:6px}.control{width:100%;border:1px solid #e3e7f1;border-radius:11px;background:#fff;color:var(--ink);padding:13px 14px;min-height:48px;outline:none;font-size:12px;font-weight:600;transition:border-color .2s,box-shadow .2s}.control:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1a33ff13}.control::placeholder{color:#a6adc0}.site-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.site{display:flex;align-items:center;gap:7px;min-width:0;cursor:pointer;border:1px solid var(--line);border-radius:11px;padding:12px 9px;font-size:10px;font-weight:800;transition:.2s}.site:has(input:checked){border-color:#aab4ff;background:#f5f6ff;color:var(--blue)}.site input{accent-color:var(--blue);width:14px;height:14px;flex:none;margin:0}.site span{overflow-wrap:anywhere}.mini-actions{display:flex;gap:10px}.linkbtn{border:0;background:none;color:var(--blue);font-size:11px;font-weight:800;padding:2px}.text-info{font-size:11px;color:var(--muted);margin:-9px 0 19px}.engine-row{display:flex;gap:9px;flex-wrap:wrap}.engine{cursor:pointer}.engine input{position:absolute;opacity:0;pointer-events:none}.engine span{display:inline-flex;padding:11px 18px;border:1px solid var(--line);border-radius:10px;font-size:11px;font-weight:800}.engine input:checked+span{background:var(--blue);border-color:var(--blue);color:#fff}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:22px}.btn{border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:12px;padding:15px 12px;font-size:12px;font-weight:900;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px #1a33ff26}.btn.secondary{background:#fff;color:var(--blue)}.right{min-width:0}.profile{background:var(--ink);color:white;border-color:var(--ink);position:relative;overflow:hidden}.profile:before{content:"";position:absolute;width:220px;height:220px;right:-115px;top:-115px;background:#ffffff0a;border-radius:50%}.profile .section-title h2{color:#fff}.profile .section-sub{color:#b9bed5}.profile-intro{display:flex;align-items:center;gap:12px;margin-bottom:18px}.profile-icon{width:42px;height:42px;display:grid;place-items:center;background:#ffffff1c;color:white;border-radius:12px;font-size:20px}.profile-intro strong{display:block;font-size:13px}.profile-intro small{display:block;color:#b9bed5;font-size:10px}.profile .control{background:#242844;border-color:#414663;color:white}.profile .control::placeholder{color:#aaaeca}.profile .fieldlabel{color:#e1e3f0}.profile .hint{color:#b9bed5}.profile .fields{gap:13px}.profile-save{width:100%;border:1px solid #656c97;background:#ffffff13;color:#fff;border-radius:11px;margin-top:17px;padding:11px;font-size:11px;font-weight:800}.preview{background:#f7f8ff;border:1px solid #e8eaff;border-radius:12px;padding:16px;overflow-wrap:anywhere;min-height:108px;font:500 11px/1.85 ui-monospace,SFMono-Regular,Consolas,monospace;color:#3c456b}.preview strong{color:var(--blue)}.preview-header{display:flex;align-items:center;justify-content:space-between;margin:-4px 0 13px}.preview-header strong{font-size:11px}.badge{background:#e8ecff;color:var(--blue);border-radius:999px;padding:5px 8px;font-size:10px;font-weight:900}.small-btn{border:0;background:#eff1ff;color:var(--blue);border-radius:8px;padding:8px 11px;font-size:10px;font-weight:800}.list-item{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:9px}.list-item .name{border:0;text-align:left;background:none;color:var(--ink);font-size:11px;font-weight:800;max-width:100%;overflow-wrap:anywhere;padding:0}.list-item small{display:block;font-size:9px;color:var(--muted);margin-top:3px}.remove{border:0;background:#f4f5fb;color:#8a90a6;border-radius:7px;min-width:26px;height:26px;font-size:15px}.empty{color:var(--muted);font-size:11px;padding:12px 0}.counter{background:#f4f6ff;border:1px solid var(--line);border-radius:11px;display:flex;align-items:center;justify-content:space-between;padding:14px;margin-bottom:13px;font-size:11px;font-weight:800}.counter strong{color:var(--blue);font-size:21px}.footer{border-top:1px solid var(--line);padding:25px 0 35px;color:var(--muted);font-size:10px}.footer .shell{display:flex;justify-content:space-between;gap:15px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,90px);background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:11px;font-weight:700;box-shadow:var(--shadow);transition:.25s;z-index:10}.toast.show{transform:translate(-50%,0)}@media(max-width:900px){.layout{grid-template-columns:1fr}.hero{padding-top:45px}.site-grid{grid-template-columns:repeat(4,1fr)}}@media(max-width:600px){.shell{padding:0 17px}.top-inner{height:70px}.brand{font-size:15px}.top-label,.hero-chip{display:none}.hero{padding:40px 0 30px}.hero h1{letter-spacing:-1.4px}.panel{padding:19px;border-radius:16px}.fields{grid-template-columns:1fr}.site-grid{grid-template-columns:repeat(2,1fr)}.buttons{grid-template-columns:1fr}.footer .shell{flex-direction:column}.section-title h2{font-size:16px}}
+</style>
 </head>
 <body>
-  <div class="shell">
-    <header>
-      <div class="logo"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.6" cy="10.6" r="6.7"/><path d="m15.6 15.6 5 5M7.5 11l2.2 2.2 4-5"/></svg></span>My Job Radar<span style="color:var(--blue)">.</span></div>
-      <div class="top-right"><span class="dot" aria-hidden="true"></span> YOUR SEARCH, SIMPLIFIED</div>
-    </header>
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3 1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3Z"/></svg> THE SMARTER WAY TO JOB HUNT</div>
-        <h1 id="hero-title">Find your next <span>big move.</span></h1>
-        <p>Skip the noise. Search real company career pages in one click, and get closer to the people behind the hiring.</p>
-      </section>
-      <section class="workspace" aria-label="Job search builder">
-        <div class="panel">
-          <div class="panel-header"><h2 class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v13H4zM9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M4 12h16"/></svg> Build your search</h2><span class="step">01 / SETUP</span></div>
-          <div class="panel-body">
-            <div class="form-grid">
-              <div class="field full"><label for="titles">Job titles <span style="color:var(--blue)">*</span></label><input id="titles" type="text" placeholder="e.g. Product Designer, UX Designer" value="Product Designer, UX Designer" autocomplete="off"/><div class="hint">Separate multiple job titles with commas.</div></div>
-              <div class="field"><label for="location">Location <span class="optional">(optional)</span></label><input id="location" type="text" placeholder="e.g. Boston, Remote" autocomplete="off"/></div>
-              <div class="field"><label for="posted">Date posted</label><select id="posted"><option value="any">Any time</option><option value="day">Past 24 hours</option><option value="week">Past week</option><option value="month">Past month</option></select></div>
-            </div>
-            <div class="rule"></div>
-            <div class="section-heading"><span class="section-label">Career platforms</span><span class="counter" id="site-count">8 selected</span></div>
-            <div class="site-grid" id="site-grid">
-              <label class="site-option"><input type="checkbox" value="boards.greenhouse.io|job-boards.greenhouse.io" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Greenhouse</span></label>
-              <label class="site-option"><input type="checkbox" value="jobs.lever.co" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Lever</span></label>
-              <label class="site-option"><input type="checkbox" value="jobs.ashbyhq.com" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Ashby</span></label>
-              <label class="site-option"><input type="checkbox" value="apply.workable.com" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Workable</span></label>
-              <label class="site-option"><input type="checkbox" value="jobs.teamtailor.com|teamtailor.com/jobs" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Teamtailor</span></label>
-              <label class="site-option"><input type="checkbox" value="jobs.smartrecruiters.com" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">SmartRecruiters</span></label>
-              <label class="site-option"><input type="checkbox" value="myworkdayjobs.com" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Workday</span></label>
-              <label class="site-option"><input type="checkbox" value="welcometothejungle.com" checked/><span class="custom-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 4 4L19 6"/></svg></span><span class="site-name">Welcome to the Jungle</span></label>
-            </div>
-            <div class="site-options-actions"><button class="text-button" id="select-all" type="button">Select all</button><button class="text-button" id="clear-all" type="button">Clear all</button></div>
-            <div class="rule"></div>
-            <div class="form-grid">
-              <div class="field"><label for="include">Include keywords <span class="optional">(optional)</span></label><input id="include" type="text" placeholder="e.g. Figma, senior" autocomplete="off"/><div class="hint">Comma-separated must-have terms.</div></div>
-              <div class="field"><label for="exclude">Exclude keywords <span class="optional">(optional)</span></label><input id="exclude" type="text" placeholder="e.g. internship, unpaid" autocomplete="off"/><div class="hint">Comma-separated terms to avoid.</div></div>
-              <div class="field full"><label for="engine">Search engine</label><select id="engine"><option value="google">Google</option><option value="bing">Bing</option><option value="duckduckgo">DuckDuckGo</option></select></div>
-            </div>
-          </div>
-        </div>
-        <aside class="right-column" aria-label="Search preview and actions">
-          <div class="panel"><div class="panel-header"><h2 class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3M14 3h7v7M10 14 21 3"/></svg> Live search preview</h2><span class="step">02 / PREVIEW</span></div><div class="panel-body"><div id="query-preview" class="query-box" role="status" aria-live="polite"></div><div id="preview-note" class="preview-note">This is what your search engine will receive.</div><div class="preview-actions"><span class="preview-badge"><i aria-hidden="true"></i> Updating in real time</span><button class="copy-button" id="copy-query" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span id="copy-label">Copy query</span></button></div></div></div>
-          <div class="action-card"><h3>Ready to discover? <span aria-hidden="true">↗</span></h3><p>We'll take you straight to the results. No sign-ups, no middlemen, just opportunities.</p><button class="primary-button" id="find-jobs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg> Find jobs <span aria-hidden="true">↗</span></button><button class="secondary-button" id="find-team" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 8a3 3 0 0 1 0 6M18 17a4 4 0 0 1 3 3"/></svg> Find the hiring team <span aria-hidden="true">↗</span></button><div id="error" class="error-message" role="alert"></div><div class="action-foot">↗ Searches open in a new tab · Completely free</div></div>
-          <div class="tip-card"><div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M9 14a6 6 0 1 1 6 0c-.7.5-1 1.3-1 2h-4c0-.7-.3-1.5-1-2Z"/></svg></div><div><strong>Pro tip</strong><p>Try a few related job titles, then narrow the results with keywords. The hiring-team button looks for LinkedIn profiles, not job postings.</p></div></div>
-        </aside>
-      </section>
-    </main>
-    <footer><div><strong>My Job Radar.</strong> Made for the ambitious.</div><div>No accounts. No tracking. Just better searching.</div></footer>
-  </div>
-  <script>
-    (() => {
-      'use strict';
-      const $ = id => document.getElementById(id);
-      const fields = ['titles','location','posted','include','exclude','engine'];
-      const siteInputs = [...document.querySelectorAll('#site-grid input[type="checkbox"]')];
-      const splitTerms = input => input.split(',').map(s => s.trim().replace(/\s+/g,' ')).filter(Boolean);
-      const quote = term => '"' + term.replace(/"/g,'').trim() + '"';
-      const group = terms => terms.length > 1 ? '(' + terms.map(quote).join(' OR ') + ')' : terms.length ? quote(terms[0]) : '';
-      const dateRange = {day:'d',week:'w',month:'m'};
-      // URL filters, not search terms, limit results by discovery/indexing date.
-      function makeUrl(query) {
-        const engine = $('engine').value;
-        const posted = $('posted').value;
-        if(engine === 'google') {
-          const url = new URL('https://www.google.com/search');
-          url.searchParams.set('q',query);
-          if(posted !== 'any') url.searchParams.set('tbs','qdr:'+dateRange[posted]);
-          return url.href;
-        }
-        if(engine === 'bing') {
-          const url = new URL('https://www.bing.com/search');
-          url.searchParams.set('q',query);
-          // Bing's date filter: day/week/month.
-          const bingDate = {day:'ez1',week:'ez2',month:'ez3'};
-          if(posted !== 'any') url.searchParams.set('filters','ex1:"'+bingDate[posted]+'"');
-          return url.href;
-        }
-        const url = new URL('https://duckduckgo.com/');
-        url.searchParams.set('q',query);
-        if(posted !== 'any') url.searchParams.set('df',dateRange[posted]);
-        return url.href;
-      }
-      function buildJobsQuery(){
-        const titles = splitTerms($('titles').value);
-        const sites = siteInputs.filter(x => x.checked).flatMap(x => x.value.split('|'));
-        const include = splitTerms($('include').value);
-        const exclude = splitTerms($('exclude').value);
-        const location = $('location').value.trim();
-        const pieces = [];
-        if(titles.length) pieces.push(group(titles));
-        if(sites.length) pieces.push('(' + sites.map(s=>'site:'+s).join(' OR ') + ')');
-        if(location) pieces.push(quote(location));
-        include.forEach(t=>pieces.push(quote(t)));
-        exclude.forEach(t=>pieces.push('-'+quote(t)));
-        return pieces.join(' ');
-      }
-      function buildHiringQuery(){
-        const titles = splitTerms($('titles').value);
-        const location = $('location').value.trim();
-        const pieces = ['site:linkedin.com/in', '("recruiter" OR "talent acquisition" OR "technical recruiter" OR "hiring manager" OR "head of talent")'];
-        if(titles.length) pieces.push(group(titles));
-        if(location) pieces.push(quote(location));
-        return pieces.join(' ');
-      }
-      function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-      function highlighted(q){
-        if(!q) return '<span class="placeholder">Enter a job title to preview your search…</span>';
-        return escapeHTML(q).replace(/\b(OR|site:)\b|site:/g,'<span class="operator">$&</span>').replace(/-&quot;[^&]*?&quot;/g,'<span class="exclusion">$&</span>');
-      }
-      function render(){
-        const count = siteInputs.filter(x=>x.checked).length;
-        $('site-count').textContent = count+' selected';
-        const q = buildJobsQuery();
-        $('query-preview').innerHTML = highlighted(q);
-        const posted = $('posted').selectedOptions[0].textContent.toLowerCase();
-        const engine = $('engine').selectedOptions[0].textContent;
-        $('preview-note').textContent = 'Searching with '+engine+( $('posted').value !== 'any' ? ' · Filter: '+posted : '')+'. Date filters apply to search engine results, not necessarily the original posting date.';
-        $('error').classList.remove('visible');
-      }
-      function search(type){
-        if(!splitTerms($('titles').value).length){
-          $('error').textContent = 'Add at least one job title to get started.';
-          $('error').classList.add('visible');
-          $('titles').focus();
-          return;
-        }
-        const q = type === 'team' ? buildHiringQuery() : buildJobsQuery();
-        // Opened only from a direct click to avoid browser popup blocking.
-        const tab = window.open(makeUrl(q),'_blank','noopener,noreferrer');
-        if(!tab){ $('error').textContent = 'Your browser may have blocked the new tab. Please allow pop-ups for this page.'; $('error').classList.add('visible'); }
-      }
-      fields.forEach(id=>{ $(id).addEventListener('input',render);$(id).addEventListener('change',render); });
-      siteInputs.forEach(x=>x.addEventListener('change',render));
-      $('select-all').addEventListener('click',()=>{siteInputs.forEach(x=>x.checked=true);render();});
-      $('clear-all').addEventListener('click',()=>{siteInputs.forEach(x=>x.checked=false);render();});
-      $('find-jobs').addEventListener('click',()=>search('jobs'));
-      $('find-team').addEventListener('click',()=>search('team'));
-      $('copy-query').addEventListener('click',async()=>{
-        const q=buildJobsQuery();
-        try{
-          if(!q) return;
-          if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(q);}
-          else {const t=document.createElement('textarea');t.value=q;t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.select();if(!document.execCommand('copy')) throw Error('Clipboard unavailable');t.remove();}
-          $('copy-label').textContent='Copied!';
-          setTimeout(()=>$('copy-label').textContent='Copy query',1800);
-        } catch(e){$('copy-label').textContent='Could not copy';setTimeout(()=>$('copy-label').textContent='Copy query',1800);}
-      });
-      render();
-    })();
-  </script>
-</body>
-</html>
+<header class="top"><div class="shell top-inner"><div class="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 12l6-6"/></svg></span>My Job Radar<span style="color:var(--blue)">.</span></div><div class="top-right"><span class="top-label" data-i18n="madeFor">Built around you</span><div class="lang"><button id="langEn" class="active" type="button">EN</button><button id="langFr" type="button">FR</button></div><button class="avatar" id="profileJump" title="Edit profile" type="button">JR</button></div></div></header>
+<div class="shell"><section class="hero"><div><div class="eyebrow" data-i18n="eyebrow">YOUR SEARCH. YOUR RULES.</div><h1><span data-i18n="headlineA">Make your next</span><br><span data-i18n="headlineB">move count.</span></h1><p data-i18n="subtitle">Skip the noise. Discover opportunities directly on company career pages and find the people behind the hiring.</p></div><div class="hero-chip"><span class="pulse"></span><span data-i18n="ready">Your radar is ready</span></div></section>
+<div class="layout"><div class="left">
+<section class="panel"><div class="section-title"><h2><span class="num">01</span><span data-i18n="searchTitle">Build your search</span></h2><span class="section-sub" data-i18n="autoPreview">Live preview enabled</span></div><div class="fields">
+<div class="field full"><label class="fieldlabel" for="titles" data-i18n="titles">Job titles</label><input class="control" id="titles" placeholder="Software Engineer, Product Designer, Data Analyst"><div class="hint" data-i18n="separate">Separate multiple roles with commas</div></div>
+<div class="field"><label class="fieldlabel" for="location" data-i18n="location">Location</label><input class="control" id="location" placeholder="Boston, Remote, Paris"></div>
+<div class="field"><label class="fieldlabel" for="posted" data-i18n="posted">Date posted</label><select class="control" id="posted"><option value="any" data-i18n="any">Any time</option><option value="day" data-i18n="day">Past 24 hours</option><option value="week" data-i18n="week">Past week</option><option value="month" data-i18n="month">Past month</option></select></div>
+<div class="field"><label class="fieldlabel" for="include" data-i18n="include">Include keywords <span style="color:#9fa5ba">(optional)</span></label><input class="control" id="include" placeholder="React, remote, junior"></div>
+<div class="field"><label class="fieldlabel" for="exclude" data-i18n="exclude">Exclude keywords <span style="color:#9fa5ba">(optional)</span></label><input class="control" id="exclude" placeholder="senior, internship"></div></div></section>
+<section class="panel"><div class="section-title"><h2><span class="num">02</span><span data-i18n="sitesTitle">Where to look</span></h2><div class="mini-actions"><button type="button" class="linkbtn" id="allSites" data-i18n="selectAll">Select all</button><button type="button" class="linkbtn" id="noSites" data-i18n="clear">Clear</button></div></div><p class="text-info" data-i18n="siteInfo">Search real career pages using search engine operators.</p><div class="site-grid" id="siteGrid">
+<label class="site"><input type="checkbox" value="boards.greenhouse.io|job-boards.greenhouse.io" checked><span>Greenhouse</span></label>
+<label class="site"><input type="checkbox" value="jobs.lever.co" checked><span>Lever</span></label>
+<label class="site"><input type="checkbox" value="jobs.ashbyhq.com" checked><span>Ashby</span></label>
+<label class="site"><input type="checkbox" value="apply.workable.com" checked><span>Workable</span></label>
+<label class="site"><input type="checkbox" value="jobs.teamtailor.com|career.teamtailor.com" checked><span>Teamtailor</span></label>
+<label class="site"><input type="checkbox" value="jobs.smartrecruiters.com" checked><span>SmartRecruiters</span></label>
+<label class="site"><input type="checkbox" value="myworkdayjobs.com" checked><span>Workday</span></label>
+<label class="site"><input type="checkbox" value="welcometothejungle.com" checked><span>Welcome to the Jungle</span></label>
+</div></section>
+<section class="panel"><div class="section-title"><h2><span class="num">03</span><span data-i18n="launch">Launch your radar</span></h2></div><label class="fieldlabel" data-i18n="engine">Search engine</label><div class="engine-row"><label class="engine"><input type="radio" name="engine" value="google" checked><span>Google</span></label><label class="engine"><input type="radio" name="engine" value="bing"><span>Bing</span></label><label class="engine"><input type="radio" name="engine" value="ddg"><span>DuckDuckGo</span></label></div><div class="buttons"><button type="button" class="btn" id="findJobs">↗ <span data-i18n="find">Find jobs</span></button><button type="button" class="btn secondary" id="findTeam">◎ <span data-i18n="team">Find hiring team</span></button></div></section>
+</div><aside class="right">
+<section class="panel profile" id="profile"><div class="section-title"><h2 data-i18n="profile">Your search profile</h2><span class="section-sub">✦ <span data-i18n="personalize">Personalize</span></span></div><div class="profile-intro"><div class="profile-icon">✳</div><div><strong id="greeting">Your workspace</strong><small data-i18n="saveBrowser">Saved privately in your browser</small></div></div><div class="fields"><div class="field full"><label class="fieldlabel" for="profileName" data-i18n="name">Your name</label><input id="profileName" class="control" placeholder="Your name"></div><div class="field full"><label class="fieldlabel" for="profileRole" data-i18n="idealRole">Your ideal role</label><input id="profileRole" class="control" placeholder="Frontend Developer"></div><div class="field full"><label class="fieldlabel" for="profileLocation" data-i18n="preferred">Preferred location</label><input id="profileLocation" class="control" placeholder="Boston, Paris, Remote"></div></div><button type="button" class="profile-save" id="saveProfile" data-i18n="applyProfile">Apply profile to search</button></section>
+<section class="panel"><div class="section-title"><h2 data-i18n="previewTitle">Live search preview</h2><span class="badge" id="engineBadge">GOOGLE</span></div><div class="preview-header"><strong data-i18n="query">Your search query</strong><button type="button" class="small-btn" id="copyQuery" data-i18n="copy">Copy</button></div><div class="preview" id="preview" aria-live="polite"></div><div class="counter"><span data-i18n="active">Career platforms selected</span><strong id="siteCount">8</strong></div><button class="small-btn" id="saveFavorite" type="button" style="width:100%;padding:12px">☆ <span data-i18n="saveFavorite">Save this search</span></button></section>
+<section class="panel"><div class="section-title"><h2 data-i18n="favorites">Favorite searches</h2><span class="badge" id="favoriteCount">0</span></div><div id="favoritesList" class="empty"></div></section>
+<section class="panel"><div class="section-title"><h2 data-i18n="history">Recent searches</h2><button class="linkbtn" type="button" id="clearHistory" data-i18n="clear">Clear</button></div><div id="historyList" class="empty"></div></section>
+</aside></div></div><footer class="footer"><div class="shell"><span>© 2026 My Job Radar · <span data-i18n="footerA">Made for the next chapter.</span></span><span data-i18n="footerB">No account. No tracking. Your settings stay on this device.</span></div></footer><div class="toast" id="toast" role="status"></div>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id), K='my-job-radar-v2',siteInputs=[...document.querySelectorAll('#siteGrid input')];const dictionary={en:{madeFor:'Built around you',eyebrow:'YOUR SEARCH. YOUR RULES.',headlineA:'Make your next',headlineB:'move count.',subtitle:'Skip the noise. Discover opportunities directly on company career pages and find the people behind the hiring.',ready:'Your radar is ready',searchTitle:'Build your search',autoPreview:'Live preview enabled',titles:'Job titles',separate:'Separate multiple roles with commas',location:'Location',posted:'Date posted',any:'Any time',day:'Past 24 hours',week:'Past week',month:'Past month',include:'Include keywords (optional)',exclude:'Exclude keywords (optional)',sitesTitle:'Where to look',selectAll:'Select all',clear:'Clear',siteInfo:'Search real career pages using search engine operators.',launch:'Launch your radar',engine:'Search engine',find:'Find jobs',team:'Find hiring team',profile:'Your search profile',personalize:'Personalize',saveBrowser:'Saved privately in your browser',name:'Your name',idealRole:'Your ideal role',preferred:'Preferred location',applyProfile:'Apply profile to search',previewTitle:'Live search preview',query:'Your search query',copy:'Copy',active:'Career platforms selected',saveFavorite:'Save this search',favorites:'Favorite searches',history:'Recent searches',footerA:'Made for the next chapter.',footerB:'No account. No tracking. Your settings stay on this device.',emptyFavorites:'No saved searches yet.',emptyHistory:'Your searches will appear here.',workspace:'Your workspace',saved:'Search saved!',duplicate:'Already in favorites',copied:'Query copied',applied:'Profile applied',missing:'Add at least one job title or keyword',restored:'Search restored',removed:'Deleted',noSites:'Choose at least one career platform'},fr:{madeFor:'Pensé pour toi',eyebrow:'TA RECHERCHE. TES RÈGLES.',headlineA:'Trouve ton prochain',headlineB:'grand défi.',subtitle:'Évite le bruit. Découvre les opportunités directement sur les sites carrière et trouve les équipes qui recrutent.',ready:'Ton radar est prêt',searchTitle:'Construis ta recherche',autoPreview:'Aperçu en direct',titles:'Intitulés de postes',separate:'Sépare plusieurs postes avec des virgules',location:'Localisation',posted:'Date de publication',any:'Toutes les dates',day:'24 dernières heures',week:'7 derniers jours',month:'30 derniers jours',include:'Mots à inclure (facultatif)',exclude:'Mots à exclure (facultatif)',sitesTitle:'Où chercher',selectAll:'Tout sélectionner',clear:'Effacer',siteInfo:'Cherche sur les pages carrière grâce aux opérateurs des moteurs de recherche.',launch:'Lance ton radar',engine:'Moteur de recherche',find:'Trouver des offres',team:'Trouver les recruteurs',profile:'Ton profil',personalize:'Personnaliser',saveBrowser:'Enregistré localement dans ton navigateur',name:'Ton prénom',idealRole:'Ton poste idéal',preferred:'Ta ville préférée',applyProfile:'Appliquer le profil à la recherche',previewTitle:'Aperçu en direct',query:'Requête de recherche',copy:'Copier',active:'Plateformes sélectionnées',saveFavorite:'Enregistrer cette recherche',favorites:'Recherches favorites',history:'Recherches récentes',footerA:'Pour ta prochaine étape.',footerB:'Sans compte, sans suivi. Tes paramètres restent sur cet appareil.',emptyFavorites:'Aucune recherche enregistrée.',emptyHistory:'Tes recherches apparaîtront ici.',workspace:'Ton espace',saved:'Recherche enregistrée !',duplicate:'Déjà dans les favoris',copied:'Requête copiée',applied:'Profil appliqué',missing:'Ajoute au moins un poste ou un mot-clé',restored:'Recherche restaurée',removed:'Supprimé',noSites:'Sélectionne au moins une plateforme'}};
+const defaults={lang:'en',titles:'',location:'',posted:'any',include:'',exclude:'',engine:'google',sites:siteInputs.map(x=>x.value),profile:{name:'',role:'',location:''},favorites:[],history:[]};let state;try{state={...defaults,...JSON.parse(localStorage.getItem(K)||'{}')}}catch{state={...defaults}};state.profile={...defaults.profile,...(state.profile||{})};state.favorites=Array.isArray(state.favorites)?state.favorites:[];state.history=Array.isArray(state.history)?state.history:[];const t=k=>dictionary[state.lang]?.[k]||k,split=s=>s.split(',').map(x=>x.trim().replace(/\s+/g,' ')).filter(Boolean),quote=s=>'"'+s.replace(/"/g,'')+'"',or=arr=>arr.length>1?'('+arr.map(quote).join(' OR ')+')':arr.length?quote(arr[0]):'',esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let toastTimer;
+function notify(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2300)}function persist(){try{localStorage.setItem(K,JSON.stringify(state))}catch{}}
+function readForm(){for(const id of ['titles','location','posted','include','exclude'])state[id]=$(id).value;state.engine=document.querySelector('input[name="engine"]:checked').value;state.sites=siteInputs.filter(i=>i.checked).map(i=>i.value)}function restoreForm(){for(const id of ['titles','location','posted','include','exclude'])$(id).value=state[id]??'';document.querySelector(`input[name="engine"][value="${['google','bing','ddg'].includes(state.engine)?state.engine:'google'}"]`).checked=true;siteInputs.forEach(i=>i.checked=state.sites.includes(i.value))}
+function jobsQuery(){const p=[];if(split(state.titles).length)p.push(or(split(state.titles)));if(state.location.trim())p.push(quote(state.location.trim()));const domains=state.sites.flatMap(s=>s.split('|'));if(domains.length)p.push('('+domains.map(x=>'site:'+x).join(' OR ')+')');for(const x of split(state.include))p.push(quote(x));for(const x of split(state.exclude))p.push('-'+quote(x));return p.join(' ')}function hiringQuery(){const p=['site:linkedin.com/in','("recruiter" OR "talent acquisition" OR "technical recruiter" OR "hiring manager" OR "head of talent")'];if(split(state.titles).length)p.push(or(split(state.titles)));if(state.location.trim())p.push(quote(state.location.trim()));return p.join(' ')}function urlFor(q){if(state.engine==='google'){const u=new URL('https://www.google.com/search');u.searchParams.set('q',q);if(state.posted!=='any')u.searchParams.set('tbs','qdr:'+({day:'d',week:'w',month:'m'}[state.posted]));return u.toString()}if(state.engine==='bing'){const u=new URL('https://www.bing.com/search');u.searchParams.set('q',q);if(state.posted!=='any')u.searchParams.set('filters','ex1:"'+({day:'ez1',week:'ez2',month:'ez3'}[state.posted])+'"');return u.toString()}const u=new URL('https://duckduckgo.com/');u.searchParams.set('q',q);if(state.posted!=='any')u.searchParams.set('df',({day:'d',week:'w',month:'m'}[state.posted]));return u.toString()}
+function snapshot(){return {titles:state.titles,location:state.location,posted:state.posted,include:state.include,exclude:state.exclude,engine:state.engine,sites:[...state.sites]}}function same(a,b){return JSON.stringify(a)===JSON.stringify(b)}function applySnap(s){Object.assign(state,{...s,sites:[...(s.sites||[])]});restoreForm();update();notify(t('restored'))}function itemLabel(s){return s.titles?.trim()||s.include?.trim()||'Job search'}function renderLists(){for(const [type,node] of [['favorites',$('favoritesList')],['history',$('historyList')]]){const entries=state[type];node.className=entries.length?'':'empty';node.innerHTML=entries.length?entries.map((o,i)=>`<div class="list-item"><button class="name" data-action="restore" data-kind="${type}" data-index="${i}">${esc(itemLabel(o.search))}<small>${esc(o.search.location||'Anywhere')} · ${esc(o.search.engine.toUpperCase())}</small></button><button class="remove" data-action="delete" data-kind="${type}" data-index="${i}" aria-label="Remove">×</button></div>`).join(''):t(type==='favorites'?'emptyFavorites':'emptyHistory')}$('favoriteCount').textContent=state.favorites.length}
+function render(){document.documentElement.lang=state.lang;document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});$('langEn').classList.toggle('active',state.lang==='en');$('langFr').classList.toggle('active',state.lang==='fr');$('greeting').textContent=state.profile.name?state.profile.name+"'s radar":t('workspace');}
+function update(){readForm();persist();const q=jobsQuery();$('preview').innerHTML=q?esc(q).replace(/(site:[\w.-]+)/g,'<strong>$1</strong>'):'<span style="color:#929ab2">Your search query will appear here…</span>';$('engineBadge').textContent=state.engine==='ddg'?'DUCKDUCKGO':state.engine.toUpperCase();$('siteCount').textContent=state.sites.length;renderLists()}
+function setLang(lang){state.lang=lang;document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));$('langEn').classList.toggle('active',lang==='en');$('langFr').classList.toggle('active',lang==='fr');$('greeting').textContent=state.profile.name?state.profile.name+"'s radar":t('workspace');persist();renderLists()}
+function run(kind){readForm();if(!state.titles.trim()&&!state.include.trim()){notify(t('missing'));$('titles').focus();return}if(kind==='jobs'&&!state.sites.length){notify(t('noSites'));return}const query=kind==='team'?hiringQuery():jobsQuery();const u=urlFor(query);const tab=window.open(u,'_blank','noopener,noreferrer');if(!tab)notify('Allow pop-ups for this site');const s=snapshot();state.history=[{search:s,at:Date.now()},...state.history.filter(x=>!same(x.search,s))].slice(0,8);persist();renderLists()}
+for(const id of ['titles','location','posted','include','exclude'])$(id).addEventListener('input',update);document.querySelectorAll('input[name="engine"]').forEach(i=>i.addEventListener('change',update));siteInputs.forEach(i=>i.addEventListener('change',update));$('allSites').addEventListener('click',()=>{siteInputs.forEach(i=>i.checked=true);update()});$('noSites').addEventListener('click',()=>{siteInputs.forEach(i=>i.checked=false);update()});$('langEn').onclick=()=>setLang('en');$('langFr').onclick=()=>setLang('fr');$('findJobs').onclick=()=>run('jobs');$('findTeam').onclick=()=>run('team');$('profileJump').onclick=()=>$('profile').scrollIntoView({behavior:'smooth'});
+$('saveProfile').onclick=()=>{state.profile={name:$('profileName').value.trim(),role:$('profileRole').value.trim(),location:$('profileLocation').value.trim()};if(state.profile.role)$('titles').value=state.profile.role;if(state.profile.location)$('location').value=state.profile.location;const name=state.profile.name;$('greeting').textContent=name?name+"'s radar":t('workspace');$('profileJump').textContent=name?name.slice(0,2).toUpperCase():'JR';update();notify(t('applied'))};$('saveFavorite').onclick=()=>{readForm();const s=snapshot();if(state.favorites.some(x=>same(x.search,s))){notify(t('duplicate'));return}state.favorites.unshift({search:s,at:Date.now()});state.favorites=state.favorites.slice(0,20);persist();renderLists();notify(t('saved'))};$('copyQuery').onclick=async()=>{const query=jobsQuery();try{await navigator.clipboard.writeText(query)}catch{const el=document.createElement('textarea');el.value=query;document.body.appendChild(el);el.select();document.execCommand('copy');el.remove()}notify(t('copied'))};$('clearHistory').onclick=()=>{state.history=[];persist();renderLists()};for(const id of ['favoritesList','historyList'])$(id).addEventListener('click',e=>{const btn=e.target.closest('button[data-action]');if(!btn)return;const {action,kind,index}=btn.dataset;const i=Number(index);if(action==='restore')applySnap(state[kind][i].search);else{state[kind].splice(i,1);persist();renderLists();notify(t('removed'))}});
+restoreForm();for(const [id,key] of [['profileName','name'],['profileRole','role'],['profileLocation','location']])$(id).value=state.profile[key];$('profileJump').textContent=state.profile.name?state.profile.name.slice(0,2).toUpperCase():'JR';setLang(state.lang==='fr'?'fr':'en');update();
+})();
+</script>
+</body></html>
